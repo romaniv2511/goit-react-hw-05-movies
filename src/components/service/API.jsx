@@ -7,6 +7,12 @@ const AUTH_KEY = '234e7b4c27db682739301b8b46dc0452';
 
 export const fetchTrendingFilms = async () => {
   const response = await axios.get(`/3/trending/movie/day?api_key=${AUTH_KEY}`);
-  //   console.log(response);
+  return response;
+};
+
+export const fetchFilmsByName = async name => {
+  const response = await axios.get(
+    `/3/search/movie?api_key=${AUTH_KEY}&query=${name}`
+  );
   return response;
 };
