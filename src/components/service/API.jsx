@@ -20,3 +20,9 @@ export const fetchFilmById = async movieId => {
   const response = await axios.get(`/3/movie/${movieId}?api_key=${AUTH_KEY}`);
   return response;
 };
+export const fetchReviews = async movieId => {
+  const response = await axios.get(
+    `/3/movie/${movieId}/reviews?api_key=${AUTH_KEY}`
+  );
+  return response;
+};

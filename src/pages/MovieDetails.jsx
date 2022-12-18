@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, Outlet, useParams } from 'react-router-dom';
 import { fetchFilmById } from '../components/service/API';
 
 export const MovieDetails = () => {
@@ -17,13 +17,14 @@ export const MovieDetails = () => {
   useEffect(() => {
     fetchFilmById(movieId).then(({ data }) => {
       const { poster_path, title, vote_average, overview, genres } = data;
+
       setPosterPath(poster_path);
       setFilmName(title);
       setUserScore((vote_average * 10).toFixed(2));
       setOverview(overview);
       setGenres(genres.map(({ name }) => name).join(', '));
     });
-  }, []);
+  }, [movieId]);
 
   return (
     <main>
@@ -44,13 +45,14 @@ export const MovieDetails = () => {
         <h3>Additional information</h3>
         <ul>
           <li>
-            <Link to="/movies">Cast</Link>
+            <Link to="cast">Cast</Link>
           </li>
           <li>
-            <Link to="/movies">Reviews</Link>
+            <Link to="reviews">Reviews</Link>
           </li>
         </ul>
       </div>
+      <Outlet />
     </main>
   );
 };
