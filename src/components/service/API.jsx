@@ -26,3 +26,9 @@ export const fetchReviews = async movieId => {
   );
   return response;
 };
+export const fetchCast = async movieId => {
+  const response = await axios.get(
+    `/3/movie/${movieId}/credits?api_key=${AUTH_KEY}`
+  );
+  return response;
+};

@@ -17,7 +17,9 @@ export const Reviews = () => {
     });
   }, [movieId]);
 
-  return (
+  return !reviews.length ? (
+    <p>We don't have any reviews for this movie.</p>
+  ) : (
     <ul>
       {reviews.map(({ id, author, content }) => (
         <li key={id}>
