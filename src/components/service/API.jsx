@@ -16,3 +16,7 @@ export const fetchFilmsByName = async name => {
   );
   return response;
 };
+export const fetchFilmById = async movieId => {
+  const response = await axios.get(`/3/movie/${movieId}?api_key=${AUTH_KEY}`);
+  return response;
+};
