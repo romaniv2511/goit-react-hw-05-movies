@@ -20,7 +20,8 @@ export const Link = styled(NavLink)`
   &.active {
     color: red;
   }
-  &:hover:not(.active) {
+  &:hover:not(.active),
+  &:focus:not(.active) {
     color: grey;
   }
 `;

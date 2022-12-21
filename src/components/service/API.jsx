@@ -1,5 +1,3 @@
-// https://api.themoviedb.org/3/movie/550?api_key=234e7b4c27db682739301b8b46dc0452
-
 import axios from 'axios';
 
 axios.defaults.baseURL = 'https://api.themoviedb.org';
