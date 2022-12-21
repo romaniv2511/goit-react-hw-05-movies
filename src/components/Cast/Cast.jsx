@@ -19,7 +19,9 @@ export const Cast = () => {
     });
   }, [movieId]);
 
-  return (
+  return !cast.length ? (
+    <p>Have no information</p>
+  ) : (
     <ul>
       {cast.map(({ id, name, character, profile_path }) => {
         const photo = !profile_path
