@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link, Outlet, useParams } from 'react-router-dom';
-import { fetchFilmById } from '../components/service/API';
+import { fetchFilmById } from '../../components/service/API';
+import {
+  PrimaryInfoBox,
+  ExtraInfoBox,
+  ExtraInfoList,
+  ExtraInfoLink,
+} from './MovieDetails.styles';
 
 export const MovieDetails = () => {
   const { movieId } = useParams();
@@ -27,32 +33,34 @@ export const MovieDetails = () => {
   }, [movieId]);
 
   return (
-    <main>
-      <div>
-        <img alt="poster" src={posterUrl} width="300" />
-        <h1>{filmName}</h1>
+    <>
+      <PrimaryInfoBox>
+        <img alt="poster" src={posterUrl} height="300" />
+        <div>
+          <h1>{filmName}</h1>
 
-        <p>
-          <b>User score:</b> {userScore} %
-        </p>
+          <p>
+            <b>User score:</b> {userScore} %
+          </p>
 
-        <h2>Overview</h2>
-        <p>{overview}</p>
-        <h2>Genres</h2>
-        <p>{genres}</p>
-      </div>
-      <div>
+          <h2>Overview</h2>
+          <p>{overview}</p>
+          <h2>Genres</h2>
+          <p>{genres}</p>
+        </div>
+      </PrimaryInfoBox>
+      <ExtraInfoBox>
         <h3>Additional information</h3>
-        <ul>
+        <ExtraInfoList>
           <li>
-            <Link to="cast">Cast</Link>
+            <ExtraInfoLink to="cast">Cast</ExtraInfoLink>
           </li>
           <li>
-            <Link to="reviews">Reviews</Link>
+            <ExtraInfoLink to="reviews">Reviews</ExtraInfoLink>
           </li>
-        </ul>
-      </div>
-      <Outlet />
-    </main>
+        </ExtraInfoList>
+        <Outlet />
+      </ExtraInfoBox>
+    </>
   );
 };
