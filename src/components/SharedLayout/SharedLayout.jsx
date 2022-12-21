@@ -1,6 +1,6 @@
 import { GlobalStyle } from '../GlobalStyle';
 import { Outlet } from 'react-router-dom';
-import { Header, NavList, Link } from './SharedLayout.styles';
+import { Header, NavList, Link, Main } from './SharedLayout.styles';
 
 export const SharedLayout = () => {
   return (
@@ -18,9 +18,9 @@ export const SharedLayout = () => {
           </NavList>
         </nav>
       </Header>
-      <main>
+      <Main>
         <Outlet />
-      </main>
+      </Main>
     </>
   );
 };
