@@ -1,21 +1,26 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { GlobalStyle } from '../GlobalStyle';
+import { Outlet } from 'react-router-dom';
+import { Header, NavList, Link } from './SharedLayout.styles';
 
 export const SharedLayout = () => {
   return (
     <>
-      <header>
+      <GlobalStyle />
+      <Header>
         <nav>
-          <ul>
+          <NavList>
             <li>
-              <NavLink to="/">Home</NavLink>
+              <Link to="/">Home</Link>
             </li>
             <li>
-              <NavLink to="/movies">Movies</NavLink>
+              <Link to="/movies">Movies</Link>
             </li>
-          </ul>
+          </NavList>
         </nav>
-      </header>
-      <Outlet />
+      </Header>
+      <main>
+        <Outlet />
+      </main>
     </>
   );
 };
