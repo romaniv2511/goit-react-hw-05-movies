@@ -1,11 +1,11 @@
-import { Link } from 'react-router-dom';
+import { FilmsList, FilmLink } from './MoviesList.styles';
 
 export const MoviesList = ({ films }) => (
-  <ul>
+  <FilmsList>
     {films.map(({ id, title }) => (
       <li key={id}>
-        <Link to={`/movies/${id}`}>{title}</Link>
+        <FilmLink to={`/movies/${id}`}>{title}</FilmLink>
       </li>
     ))}
-  </ul>
+  </FilmsList>
 );
