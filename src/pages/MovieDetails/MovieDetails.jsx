@@ -9,7 +9,7 @@ import {
   ExtraInfoLink,
 } from './MovieDetails.styles';
 
-const MovieDetails = ({ state }) => {
+const MovieDetails = () => {
   const { movieId } = useParams();
   const [posterPath, setPosterPath] = useState('');
   const [filmName, setFilmName] = useState('');
