@@ -1,24 +1,27 @@
-import { fetchFilmsByName } from 'components/service/API';
 import { useState, useEffect } from 'react';
+import { useSearchParams, useLocation } from 'react-router-dom';
+import { fetchFilmsByName } from 'components/service/API';
+
 import { SearchBar } from '../components/SearchBar/SearchBar';
 import { MoviesList } from '../components/MoviesList/MoviesList';
 
 export const Movies = () => {
   const [films, setFilms] = useState([]);
-  const [searchValue, setSearchValue] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const query = searchParams.get('query');
 
-  const updateSearchValue = value => setSearchValue(value.trim());
+  const updateQuery = value => setSearchParams({ query: value.trim() });
   useEffect(() => {
-    if (!searchValue) {
+    if (!query) {
       return;
     }
 
-    fetchFilmsByName(searchValue).then(data => setFilms(data.data.results));
-  }, [searchValue]);
+    fetchFilmsByName(query).then(data => setFilms(data.data.results));
+  }, [query]);
 
   return (
     <>
-      <SearchBar onSubmit={updateSearchValue} />
+      <SearchBar onSubmit={updateQuery} />
       <MoviesList films={films} />
     </>
   );

@@ -1,24 +1,21 @@
 import { useState, useEffect } from 'react';
-import { Outlet, useParams } from 'react-router-dom';
+import { Outlet, useParams, useLocation } from 'react-router-dom';
 import { fetchFilmById } from '../../components/service/API';
 import {
+  GoBackButton,
   PrimaryInfoBox,
   ExtraInfoBox,
   ExtraInfoList,
   ExtraInfoLink,
 } from './MovieDetails.styles';
 
-export const MovieDetails = () => {
+export const MovieDetails = ({ state }) => {
   const { movieId } = useParams();
   const [posterPath, setPosterPath] = useState('');
   const [filmName, setFilmName] = useState('');
   const [userScore, setUserScore] = useState(0);
   const [overview, setOverview] = useState('');
   const [genres, setGenres] = useState('');
-
-  const posterUrl = !posterPath
-    ? 'https://cdn.pixabay.com/photo/2016/03/31/17/54/cartoon-1293990_960_720.png'
-    : `https://image.tmdb.org/t/p/w500/${posterPath}`;
 
   useEffect(() => {
     fetchFilmById(movieId).then(({ data }) => {
@@ -32,8 +29,17 @@ export const MovieDetails = () => {
     });
   }, [movieId]);
 
+  const posterUrl = !posterPath
+    ? 'https://cdn.pixabay.com/photo/2016/03/31/17/54/cartoon-1293990_960_720.png'
+    : `https://image.tmdb.org/t/p/w500/${posterPath}`;
+
+  const location = useLocation();
+
   return (
     <>
+      <GoBackButton to={location.state?.from ?? '/'}>
+        &#129104; Go back
+      </GoBackButton>
       <PrimaryInfoBox>
         <img alt="poster" src={posterUrl} height="300" />
         <div>
