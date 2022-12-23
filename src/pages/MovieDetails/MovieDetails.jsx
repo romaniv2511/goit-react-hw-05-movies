@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { Outlet, useParams, useLocation } from 'react-router-dom';
 import { fetchFilmById } from '../../components/service/API';
 import {
@@ -9,7 +9,7 @@ import {
   ExtraInfoLink,
 } from './MovieDetails.styles';
 
-export const MovieDetails = ({ state }) => {
+const MovieDetails = ({ state }) => {
   const { movieId } = useParams();
   const [posterPath, setPosterPath] = useState('');
   const [filmName, setFilmName] = useState('');
@@ -65,8 +65,12 @@ export const MovieDetails = ({ state }) => {
             <ExtraInfoLink to="reviews">Reviews</ExtraInfoLink>
           </li>
         </ExtraInfoList>
-        <Outlet />
+        <Suspense fallback={<div>Loading...</div>}>
+          <Outlet />
+        </Suspense>
       </ExtraInfoBox>
     </>
   );
 };
+
+export default MovieDetails;

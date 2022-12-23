@@ -5,7 +5,7 @@ import { fetchFilmsByName } from 'components/service/API';
 import { SearchBar } from '../components/SearchBar/SearchBar';
 import { MoviesList } from '../components/MoviesList/MoviesList';
 
-export const Movies = () => {
+const Movies = () => {
   const [films, setFilms] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get('query');
@@ -26,3 +26,5 @@ export const Movies = () => {
     </>
   );
 };
+
+export default Movies;

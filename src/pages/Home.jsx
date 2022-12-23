@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { fetchTrendingFilms } from '../components/service/API';
 import { MoviesList } from '../components/MoviesList/MoviesList';
 
-export const Home = () => {
+const Home = () => {
   const [films, setFilms] = useState([]);
   useEffect(() => {
     fetchTrendingFilms().then(data => setFilms(data.data.results));
@@ -10,3 +10,5 @@ export const Home = () => {
 
   return <MoviesList films={films} />;
 };
+
+export default Home;

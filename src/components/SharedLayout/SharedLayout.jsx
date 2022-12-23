@@ -1,5 +1,7 @@
-import { GlobalStyle } from '../GlobalStyle';
+import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
+import { GlobalStyle } from '../GlobalStyle';
+
 import { Header, NavList, Link, Main } from './SharedLayout.styles';
 
 export const SharedLayout = () => {
@@ -18,9 +20,11 @@ export const SharedLayout = () => {
           </NavList>
         </nav>
       </Header>
-      <Main>
-        <Outlet />
-      </Main>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Main>
+          <Outlet />
+        </Main>
+      </Suspense>
     </>
   );
 };
