@@ -2,7 +2,6 @@ import { fetchFilmsByName } from 'components/service/API';
 import { useState, useEffect } from 'react';
 import { SearchBar } from '../components/SearchBar/SearchBar';
 import { MoviesList } from '../components/MoviesList/MoviesList';
-import { Outlet } from 'react-router-dom';
 
 export const Movies = () => {
   const [films, setFilms] = useState([]);

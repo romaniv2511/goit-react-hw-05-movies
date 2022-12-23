@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchCast } from 'components/service/API';
+import { CastList, CastItem } from './Cast.styles';
 
 export const Cast = () => {
   const { movieId } = useParams();
@@ -14,7 +15,6 @@ export const Cast = () => {
         character,
         profile_path,
       }));
-      console.log(cast);
       setCast(cast);
     });
   }, [movieId]);
@@ -22,19 +22,19 @@ export const Cast = () => {
   return !cast.length ? (
     <p>Have no information</p>
   ) : (
-    <ul>
+    <CastList>
       {cast.map(({ id, name, character, profile_path }) => {
         const photo = !profile_path
-          ? 'https://www.bworldonline.com/wp-content/uploads/2022/04/cinema02_14-01.jpg'
+          ? 'https://cdn.pixabay.com/photo/2016/03/31/17/54/cartoon-1293990_960_720.png'
           : `https://image.tmdb.org/t/p/w500/${profile_path}`;
         return (
-          <li key={id}>
+          <CastItem key={id}>
             <img src={photo} alt={name} width="200" />
             <p>{name}</p>
             <p>Character: {character}</p>
-          </li>
+          </CastItem>
         );
       })}
-    </ul>
+    </CastList>
   );
 };

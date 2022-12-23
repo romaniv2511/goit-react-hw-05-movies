@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, Outlet, useParams } from 'react-router-dom';
+import { Outlet, useParams } from 'react-router-dom';
 import { fetchFilmById } from '../../components/service/API';
 import {
   PrimaryInfoBox,
@@ -17,7 +17,7 @@ export const MovieDetails = () => {
   const [genres, setGenres] = useState('');
 
   const posterUrl = !posterPath
-    ? 'https://www.bworldonline.com/wp-content/uploads/2022/04/cinema02_14-01.jpg'
+    ? 'https://cdn.pixabay.com/photo/2016/03/31/17/54/cartoon-1293990_960_720.png'
     : `https://image.tmdb.org/t/p/w500/${posterPath}`;
 
   useEffect(() => {
