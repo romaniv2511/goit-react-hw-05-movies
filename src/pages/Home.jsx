@@ -4,11 +4,20 @@ import { MoviesList } from '../components/MoviesList/MoviesList';
 
 const Home = () => {
   const [films, setFilms] = useState([]);
+  const [error, setError] = useState('');
+
   useEffect(() => {
-    fetchTrendingFilms().then(data => setFilms(data.data.results));
+    setError('');
+
+    fetchTrendingFilms()
+      .then(data => setFilms(data.data.results))
+      .catch(error => {
+        setError('Oops, something wrong');
+        console.log(error.message);
+      });
   }, []);
 
-  return <MoviesList films={films} />;
+  return error ? <p>{error}</p> : <MoviesList films={films} />;
 };
 
 export default Home;

@@ -16,17 +16,23 @@ const MovieDetails = () => {
   const [userScore, setUserScore] = useState(0);
   const [overview, setOverview] = useState('');
   const [genres, setGenres] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    fetchFilmById(movieId).then(({ data }) => {
-      const { poster_path, title, vote_average, overview, genres } = data;
+    fetchFilmById(movieId)
+      .then(({ data }) => {
+        const { poster_path, title, vote_average, overview, genres } = data;
 
-      setPosterPath(poster_path);
-      setFilmName(title);
-      setUserScore((vote_average * 10).toFixed(2));
-      setOverview(overview);
-      setGenres(genres.map(({ name }) => name).join(', '));
-    });
+        setPosterPath(poster_path);
+        setFilmName(title);
+        setUserScore((vote_average * 10).toFixed(2));
+        setOverview(overview);
+        setGenres(genres.map(({ name }) => name).join(', '));
+      })
+      .catch(error => {
+        setError('Oops, something wrong');
+        console.log(error.message);
+      });
   }, [movieId]);
 
   const posterUrl = !posterPath
@@ -34,7 +40,9 @@ const MovieDetails = () => {
     : `https://image.tmdb.org/t/p/w500/${posterPath}`;
 
   const location = useLocation();
-
+  if (error) {
+    return <p>{error}</p>;
+  }
   return (
     <>
       <GoBackButton to={location.state?.from ?? '/'}>

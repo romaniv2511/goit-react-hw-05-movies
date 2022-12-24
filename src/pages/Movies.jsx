@@ -7,6 +7,7 @@ import { MoviesList } from '../components/MoviesList/MoviesList';
 
 const Movies = () => {
   const [films, setFilms] = useState([]);
+  const [error, setError] = useState('');
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get('query');
 
@@ -15,14 +16,20 @@ const Movies = () => {
     if (!query) {
       return;
     }
+    setError('');
 
-    fetchFilmsByName(query).then(data => setFilms(data.data.results));
+    fetchFilmsByName(query)
+      .then(data => setFilms(data.data.results))
+      .catch(error => {
+        setError('Oops, something wrong');
+        console.log(error.message);
+      });
   }, [query]);
 
   return (
     <>
       <SearchBar onSubmit={updateQuery} />
-      <MoviesList films={films} />
+      {error ? <p>{error}</p> : <MoviesList films={films} />}
     </>
   );
 };
