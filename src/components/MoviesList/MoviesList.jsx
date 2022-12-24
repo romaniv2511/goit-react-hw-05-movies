@@ -21,7 +21,7 @@ export const MoviesList = ({ films }) => {
 
 MoviesList.propTypes = {
   films: PropTypes.arrayOf(
-    PropTypes.shape({
+    PropTypes.exact({
       id: PropTypes.number.isRequired,
       title: PropTypes.string.isRequired,
     })
