@@ -1,42 +1,51 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchCast } from 'components/service/API';
+import { noticeError } from 'services/notification';
+import { fetchCast } from 'services/API';
 import { CastList, CastItem } from './Cast.styles';
+import { Loader } from 'components/Loader/Loader';
 
 const Cast = () => {
   const { movieId } = useParams();
   const [cast, setCast] = useState([]);
+  const [fetchStatus, setFetchStatus] = useState('idle');
 
   useEffect(() => {
-    fetchCast(movieId).then(({ data }) => {
-      const cast = data.cast.map(({ id, name, character, profile_path }) => ({
-        id,
-        name,
-        character,
-        profile_path,
-      }));
-      setCast(cast);
-    });
+    setFetchStatus('pending');
+
+    fetchCast(movieId)
+      .then(cast => {
+        if (!cast.length) {
+          setFetchStatus('error');
+          return;
+        }
+        setCast(cast);
+        setFetchStatus('success');
+      })
+      .catch(error => {
+        console.log(error);
+        noticeError('Oops, something wrong!');
+      });
   }, [movieId]);
 
-  return !cast.length ? (
-    <p>Have no information</p>
-  ) : (
-    <CastList>
-      {cast.map(({ id, name, character, profile_path }) => {
-        const photo = !profile_path
-          ? 'https://cdn.pixabay.com/photo/2016/03/31/17/54/cartoon-1293990_960_720.png'
-          : `https://image.tmdb.org/t/p/w500/${profile_path}`;
-        return (
-          <CastItem key={id}>
-            <img src={photo} alt={name} width="200" />
-            <p>{name}</p>
-            <p>Character: {character}</p>
-          </CastItem>
-        );
-      })}
-    </CastList>
-  );
+  if (fetchStatus === 'pending') return <Loader />;
+
+  if (fetchStatus === 'error') return <p>Have no information</p>;
+
+  if (fetchStatus === 'success')
+    return (
+      <CastList>
+        {cast.map(({ id, name, character, profileUrl }) => {
+          return (
+            <CastItem key={id}>
+              <img src={profileUrl} alt={name} width="200" />
+              <p>{name}</p>
+              <p>Character: {character}</p>
+            </CastItem>
+          );
+        })}
+      </CastList>
+    );
 };
 
 export default Cast;

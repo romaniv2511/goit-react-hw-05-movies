@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { fetchFilmsByName } from 'components/service/API';
+import { fetchFilmsByName } from 'services/API';
 
 import { SearchBar } from 'components/SearchBar/SearchBar';
 import { MoviesList } from 'components/MoviesList/MoviesList';
 import { Loader } from 'components/Loader/Loader';
-import { ErrorMessage } from 'components/ErrorMessage/ErrorMessage';
+import { noticeError } from 'services/notification';
 
 const Movies = () => {
   const [films, setFilms] = useState([]);
-  // const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get('query');
 
@@ -20,24 +19,29 @@ const Movies = () => {
     if (!query) {
       return;
     }
-    setIsError(false);
-    // setIsLoading(true);
     setFilms([]);
+    setIsLoading(true);
 
     fetchFilmsByName(query)
-      .then(data => setFilms(data))
+      .then(data => {
+        if (!data.length) {
+          noticeError(`${query} is not found!`);
+        }
+        setFilms(data);
+      })
       .catch(error => {
-        setIsError(true);
-        console.log(error.message);
+        console.log(error);
+        noticeError('Oops, something wrong!');
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
-    // .finally(setIsLoading(false));
   }, [query]);
 
   return (
     <>
       <SearchBar onSubmit={updateQuery} />
-      {/* {isLoading && <Loader />} */}
-      {isError && <ErrorMessage />}
+      {isLoading && <Loader />}
       {films.length > 0 && <MoviesList films={films} />}
     </>
   );

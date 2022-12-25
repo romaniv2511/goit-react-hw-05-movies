@@ -41,8 +41,29 @@ export const fetchFilmById = async movieId => {
   return movieDetails;
 };
 
-export const fetchReviews = async movieId =>
-  await axios.get(`/3/movie/${movieId}/reviews?api_key=${AUTH_KEY}`);
+export const fetchReviews = async movieId => {
+  const { data } = await axios.get(
+    `/3/movie/${movieId}/reviews?api_key=${AUTH_KEY}`
+  );
+  const reviews = data.results.map(({ id, author, content }) => ({
+    id,
+    author,
+    content,
+  }));
+  return reviews;
+};
 
-export const fetchCast = async movieId =>
-  await axios.get(`/3/movie/${movieId}/credits?api_key=${AUTH_KEY}`);
+export const fetchCast = async movieId => {
+  const { data } = await axios.get(
+    `/3/movie/${movieId}/credits?api_key=${AUTH_KEY}`
+  );
+  const cast = data.cast.map(({ id, name, character, profile_path }) => ({
+    id,
+    name,
+    character,
+    profileUrl: !profile_path
+      ? 'https://cdn.pixabay.com/photo/2016/03/31/17/54/cartoon-1293990_960_720.png'
+      : `https://image.tmdb.org/t/p/w500/${profile_path}`,
+  }));
+  return cast;
+};

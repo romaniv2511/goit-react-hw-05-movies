@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 import { GlobalStyle } from '../GlobalStyle';
 import { Loader } from 'components/Loader/Loader';
+import { ToastContainer } from 'react-toastify';
 import { Header, NavList, Link, Main } from './SharedLayout.styles';
 
 export const SharedLayout = () => {
@@ -19,6 +20,7 @@ export const SharedLayout = () => {
             </li>
           </NavList>
         </nav>
+        <ToastContainer />
       </Header>
       <Suspense fallback={<Loader />}>
         <Main>

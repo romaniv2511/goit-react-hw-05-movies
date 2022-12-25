@@ -1,35 +1,49 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchReviews } from 'components/service/API';
+import { fetchReviews } from 'services/API';
+import { noticeError } from 'services/notification';
+import { Loader } from 'components/Loader/Loader';
 
 const Reviews = () => {
   const { movieId } = useParams();
   const [reviews, setReviews] = useState([]);
+  const [fetchStatus, setFetchStatus] = useState('idle');
 
   useEffect(() => {
-    fetchReviews(movieId).then(({ data }) => {
-      const reviews = data.results.map(({ id, author, content }) => ({
-        id,
-        author,
-        content,
-      }));
-      setReviews(reviews);
-    });
+    setFetchStatus('pending');
+
+    fetchReviews(movieId)
+      .then(reviews => {
+        if (!reviews.length) {
+          setFetchStatus('error');
+          return;
+        }
+        setReviews(reviews);
+        setFetchStatus('success');
+      })
+      .catch(error => {
+        console.log(error);
+        noticeError('Oops, something wrong!');
+      });
   }, [movieId]);
 
-  return !reviews.length ? (
-    <p>We don't have any reviews for this movie.</p>
-  ) : (
-    <ul>
-      {reviews.map(({ id, author, content }) => (
-        <li key={id}>
-          <h3>Author: {author}</h3>
+  if (fetchStatus === 'pending') return <Loader />;
 
-          <p>{content}</p>
-        </li>
-      ))}
-    </ul>
-  );
+  if (fetchStatus === 'error')
+    return <p>We don't have any reviews for this movie.</p>;
+
+  if (fetchStatus === 'success')
+    return (
+      <ul>
+        {reviews.map(({ id, author, content }) => (
+          <li key={id}>
+            <h3>Author: {author}</h3>
+
+            <p>{content}</p>
+          </li>
+        ))}
+      </ul>
+    );
 };
 
 export default Reviews;

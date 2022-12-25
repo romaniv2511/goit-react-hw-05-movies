@@ -1,7 +1,6 @@
 import { useState, useEffect, Suspense } from 'react';
 import { Outlet, useParams, useLocation } from 'react-router-dom';
-import { fetchFilmById } from '../../components/service/API';
-import { ErrorMessage } from 'components/ErrorMessage/ErrorMessage';
+import { fetchFilmById } from '../../services/API';
 import {
   GoBackButton,
   PrimaryInfoBox,
@@ -10,40 +9,39 @@ import {
   ExtraInfoLink,
 } from './MovieDetails.styles';
 import { Loader } from 'components/Loader/Loader';
+import { noticeError } from 'services/notification';
 
 const MovieDetails = () => {
   const { movieId } = useParams();
   const [movieDetails, setMovieDetails] = useState(null);
-  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const currentLocation = useLocation().state?.from ?? '/';
 
   useEffect(() => {
-    setIsError(false);
+    setIsLoading(true);
 
     fetchFilmById(movieId)
       .then(movieDetails => {
         setMovieDetails(movieDetails);
       })
       .catch(error => {
-        setIsError(true);
+        noticeError('Oops, something wrong!');
         console.log(error.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, [movieId]);
 
-  const location = useLocation();
+  if (isLoading) return <Loader />;
 
-  console.log(location.state);
-  if (isError) {
-    return <ErrorMessage />;
-  }
   if (movieDetails) {
     const { title, userScore, overview, genres, posterUrl } = movieDetails;
     return (
       <>
-        <GoBackButton to={location.state?.from ?? '/'}>
-          &#129104; Go back
-        </GoBackButton>
+        <GoBackButton to={currentLocation}>&#129104; Go back</GoBackButton>
         <PrimaryInfoBox>
-          <img alt="poster" src={posterUrl} height="300" />
+          <img alt="poster" src={posterUrl} width="200" height="300" />
           <div>
             <h1>{title}</h1>
             <p>
@@ -59,12 +57,12 @@ const MovieDetails = () => {
           <h3>Additional information</h3>
           <ExtraInfoList>
             <li>
-              <ExtraInfoLink to="cast" state={{ from: location.state.from }}>
+              <ExtraInfoLink to="cast" state={{ from: currentLocation }}>
                 Cast
               </ExtraInfoLink>
             </li>
             <li>
-              <ExtraInfoLink to="reviews" state={{ from: location.state.from }}>
+              <ExtraInfoLink to="reviews" state={{ from: currentLocation }}>
                 Reviews
               </ExtraInfoLink>
             </li>
